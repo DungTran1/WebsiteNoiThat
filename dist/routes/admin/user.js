@@ -1,0 +1,21 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const UserController_1 = __importDefault(require("../../controllers/UserController"));
+const ConstData_1 = require("../../controllers/ConstData");
+const validate_1 = require("../../middleware/validate");
+const router = express_1.default.Router();
+router.use(UserController_1.default.CheckRole([ConstData_1.UserRoles.Admin], '/admin/login'));
+router.get('/', UserController_1.default.GetAll);
+router.get('/create', UserController_1.default.Create);
+router.post('/create', validate_1.validateCreateUser, UserController_1.default.Create);
+router.get('/details/:id', UserController_1.default.Details);
+router.get('/edit/:id', UserController_1.default.Edit);
+router.post('/edit/:id', validate_1.validateEditUser, UserController_1.default.Edit);
+router.post('/resetpass/:id', UserController_1.default.Resetpass);
+router.post('/changepass/:id', UserController_1.default.Changepass);
+router.post('/delete/:id', UserController_1.default.Delete);
+exports.default = router;

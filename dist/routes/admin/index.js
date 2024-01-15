@@ -1,0 +1,27 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const UserController_1 = __importDefault(require("../../controllers/UserController"));
+const OrderController_1 = __importDefault(require("../../controllers/OrderController"));
+const ConstData_1 = require("../../controllers/ConstData");
+const validate_1 = require("../../middleware/validate");
+const user_1 = __importDefault(require("./user"));
+const categoryGroup_1 = __importDefault(require("./categoryGroup"));
+const category_1 = __importDefault(require("./category"));
+const product_1 = __importDefault(require("./product"));
+const order_1 = __importDefault(require("./order"));
+const router = express_1.default.Router();
+router.get('/login', UserController_1.default.AdminLogin);
+router.post('/login', validate_1.validateLogin, UserController_1.default.AdminLogin);
+router.use(UserController_1.default.CheckRole([ConstData_1.UserRoles.Admin, ConstData_1.UserRoles.Manager], '/admin/login'));
+router.get('/', OrderController_1.default.Dashboard);
+router.get('/revenue', OrderController_1.default.Revenue);
+router.use('/user', user_1.default);
+router.use('/category-group', categoryGroup_1.default);
+router.use('/category', category_1.default);
+router.use('/product', product_1.default);
+router.use('/order', order_1.default);
+exports.default = router;

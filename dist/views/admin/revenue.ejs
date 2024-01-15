@@ -1,0 +1,83 @@
+<%- include('../layouts/adminHeader') -%>
+    <main>
+        <div class="container-fluid px-4">
+            <ol class="breadcrumb my-4">
+                <li class="breadcrumb-item"><a href="/admin">Bản Tin</a></li>
+                <li class="breadcrumb-item active">Doanh thu</li>
+            </ol>
+            <form action="">
+                <div class="row">
+                    <div class="col-3 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text">Từ ngày</span>
+                            <input type="date" name="fromDate" value="<%=fromDate.toLocaleDateString('en-CA')%>" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text">Đến ngày</span>
+                            <input type="date" name="toDate" value="<%=toDate.toLocaleDateString('en-CA')%>" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <button class="btn btn-primary px-4" type="submit">Lọc</button>
+                    </div>
+                </div>
+            </form>
+            <%
+                const orderUnpaid = orderList.filter(order => order.isPaid === false)
+                const orderPaid = orderList.filter(order => order.isPaid === true)
+                
+                const unpaidRevenue = orderUnpaid.reduce((total, order) => total + order.totalPrice, 0)
+                const paidRevenue = orderPaid.reduce((total, order) => total + order.totalPrice, 0)
+            %>
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <div class="row">
+                        <div class="col-xl-4">
+                            <div class="card notify bg-secondary text-white my-1">
+                                <div class="card-body">
+                                    <i class="fas fa-coins me-1"></i>
+                                    Sẽ thanh toán <br /> <b><%= new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(unpaidRevenue) %></b>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="card notify bg-success text-white my-1">
+                                <div class="card-body">
+                                    <i class="fas fa-coins me-1"></i>
+                                    Đã thanh toán <br /> <b><%= new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(paidRevenue) %></b>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="card notify bg-primary text-white my-1">
+                                <div class="card-body">
+                                    <i class="fas fa-shopping-cart me-1"></i>
+                                    Đơn hàng <br /> <b><%=orderList.length%></b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Sẽ thanh toán (<%=orderUnpaid.length%>)</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Đã thanh toán (<%=orderPaid.length%>)</a>
+                </li>
+            </ul>
+            <div class="tab-content mt-3">
+                <div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="tab-1-tab">
+                    <%- include('partials/revenueTable', {orderList: orderUnpaid}) -%>
+                </div>
+                <div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="tab-2-tab">
+                    <%- include('partials/revenueTable', {orderList: orderPaid}) -%>
+                </div>
+            </div>
+        </div>
+    </main>
+<%- include('../layouts/adminFooter') -%>

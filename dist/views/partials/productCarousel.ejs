@@ -1,0 +1,68 @@
+<!-- Product Carousel for home index -->
+<div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
+     data-owl-options='{
+                                "nav": false,
+                                "dots": true,
+                                "margin": 20,
+                                "loop": false,
+                                "responsive": {
+                                    "0": {
+                                        "items":2
+                                    },
+                                    "480": {
+                                        "items":2
+                                    },
+                                    "768": {
+                                        "items":3
+                                    },
+                                    "992": {
+                                        "items":4
+                                    },
+                                    "1280": {
+                                        "items":5,
+                                        "nav": true
+                                    }
+                                }
+                            }'>
+    <% productList.slice(0,10).forEach(item => { %>
+        <div class="product">
+            <figure class="product-media">
+                <% if(item.amount === 0) { %>
+                    <span class="product-label label-out">Đang hết hàng</span>
+                <% } %>
+                <% if(item.discount > 0) { %>
+                    <span class="product-label label-sale"><%= item.discount %>% Giảm</span>
+                <% } %>
+                <a href="/product/<%=item.id%>">
+                    <img src="/images/upload/<%=item.img%>" alt="Product image" class="product-image">
+                </a>
+    
+                <div class="product-action-vertical">
+                    <button class="btn-product-icon btn-wishlist btn-expandable js-addToWishlist" data-id="<%=item.id%>"><span>Thêm Vào Yêu Thích</span></button>
+                </div><!-- End .product-action -->
+                <div class="product-action">
+                    <button class="btn-product btn-cart js-addToCart" data-id="<%=item.id%>"><span>Thêm Vào Giỏ Hàng</span></button>
+                </div><!-- End .product-action -->
+            </figure><!-- End .product-media -->
+    
+            <div class="product-body">
+                <div class="product-cat">
+                    <a href="/product-list/<%=item.category?.id%>"><%=item.category?.name%></a>
+                </div><!-- End .product-cat -->
+                <h3 class="product-title"><a href="/product/<%=item.id%>"><%=item.name%></a></h3><!-- End .product-title -->
+                <div class="product-price">
+                    <% if(item.discount > 0) { %>
+                        <span class="new-price">
+                            <%= new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(item.price - (item.price*item.discount/100)) %>
+                        </span>
+                        <span class="old-price">
+                            <%= new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(item.price) %>
+                        </span>
+                    <% } else { %>
+                        <%= new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(item.price) %>
+                    <% } %>
+                </div><!-- End .product-price -->
+            </div><!-- End .product-body -->
+        </div><!-- End .product -->
+    <% }) %>
+</div><!-- End .owl-carousel -->

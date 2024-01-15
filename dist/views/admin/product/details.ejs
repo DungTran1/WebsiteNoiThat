@@ -1,0 +1,46 @@
+<%- include('../../layouts/adminHeader') -%>
+    <div class="px-5 py-3">
+        <h4>Thông tin sản phẩm</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt> Tên sản phẩm </dt>
+            <dd> <%= productInfo.name %> </dd>
+            
+            <dt> Danh mục</dt>
+            <dd> <%= productInfo.category?.name || '?' %> </dd>
+            
+            <dt> Ảnh </dt>
+            <dd>
+                <img src="/images/upload/<%= productInfo.img || 'default-image.jpg' %>" alt="No Image" height="300">
+            </dd>
+
+            <dt> Mô tả </dt>
+            <dd><%= productInfo.description || '?' %></dd>
+            
+            <dt> Kích cỡ </dt>
+            <dd><%= productInfo.size || '?' %></dd>
+            
+            <dt> Màu sắc </dt>
+            <dd><%= productInfo.color || '?' %></dd>
+            
+            <dt> Chất liệu </dt>
+            <dd><%= productInfo.material || '?' %></dd>
+            
+            <dt> Xuất xứ </dt>
+            <dd><%= productInfo.origin || '?' %></dd>
+            
+            <dt> Đơn giá </dt>
+            <dd><%= new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(productInfo.price) %></dd>
+            
+            <dt> Giảm giá </dt>
+            <dd><%= productInfo.discount %>%</dd>
+            
+            <dt> Số lượng tồn </dt>
+            <dd><%= productInfo.amount %></dd>
+        </dl>
+        <p>
+            <a class="btn btn-primary" href="/admin/product/edit/<%=productInfo.id%>">Sửa</a>
+            <a class="btn btn-secondary ms-2" href="/admin/product">Trở về</a>
+        </p>
+    </div>
+<%- include('../../layouts/adminFooter') -%>

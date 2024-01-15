@@ -1,0 +1,23 @@
+<!-- partial to render revenue table -->
+<table class="js-datatablesSimple">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Khách hàng</th>
+            <th>Ngày đặt hàng</th>
+            <th>Ngày giao hàng</th>
+            <th>Thành tiền</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% orderList.forEach(function(order){ %>
+            <tr>
+                <td><a href="/admin/order/details/<%=order.id%>">#<%=order.id%></a></td>
+                <td><a href="/admin/user/details/<%=order.user?.id%>"><%=order.user?.fullName || '?'%></a></td>
+                <td><%=order.orderDate?.toLocaleString() || '?'%></td>
+                <td><%=order.deliveryDate?.toLocaleString() || '?'%></td>
+                <td><%=new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(order.totalPrice)%></td>
+            </tr>
+        <% }) %>
+    </tbody>
+</table>

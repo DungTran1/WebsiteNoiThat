@@ -1,0 +1,58 @@
+<%- include('../../layouts/adminHeader') -%>
+    <main>
+        <div class="container-fluid px-4">
+            <ol class="breadcrumb my-4">
+                <li class="breadcrumb-item"><a href="/admin">Bản Tin</a></li>
+                <li class="breadcrumb-item active">Đơn Hàng</li>
+            </ol>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    Danh sách
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="tab-all-tab" data-bs-toggle="tab" data-bs-target="#tab-all" type="button" role="tab" aria-controls="tab-all" aria-selected="true">Tất cả</button>
+                        </li>
+                        <% orderStatusForDisplay.forEach(item => { %>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tab-<%=item.value%>-tab" data-bs-toggle="tab" data-bs-target="#tab-<%=item.value%>" type="button" role="tab" aria-controls="tab-<%=item.value%>" aria-selected="false"><%=item.text%></button>
+                            </li>
+                        <% }) %>
+                    </ul>
+                    <div class="tab-content mt-3" id="myTabContent">
+                        <div class="tab-pane fade show active" id="tab-all" role="tabpanel" aria-labelledby="tab-all-tab">
+                            <%- include('../partials/orderTable', { orderList }) -%>
+                        </div>
+                        <% orderStatusForDisplay.forEach(item => { %>
+                            <div class="tab-pane fade" id="tab-<%=item.value%>" role="tabpanel" aria-labelledby="tab-<%=item.value%>-tab">
+                                <%- include('../partials/orderTable', { orderList: orderList.filter(order => order.status === item.value) }) -%>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        function DeleteOrder(id) {
+            if (confirm('Bạn có chắc muốn xoá đơn hàng ?')) {
+                fetch('/admin/order/delete/'+id, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        alert(data.message);
+                        window.location = '/admin/order'
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            }
+        }
+    </script>
+<%- include('../../layouts/adminFooter') -%>

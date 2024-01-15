@@ -1,0 +1,98 @@
+<%- include('layouts/homeHeader') -%>
+    <%
+        const { q, productPerPage, totalProduct, page, category, productList } = productData
+        const totalPage = Math.ceil(totalProduct/productPerPage)
+    %>
+
+    <div class="page-header mb-2 text-center" style="background-image: url('/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Danh sách sản phẩm<span><%=category?.name || 'Tất cả sản phẩm'%></span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+
+    <div class="page-content">
+        <div class="container">
+            <div class="toolbox">
+                <div class="toolbox-left">
+                </div><!-- End .toolbox-left -->
+                <div class="toolbox-center">
+                    <div class="toolbox-info">
+                        Hiển thị <%=productList.length%> trên <%=totalProduct%> Sản phẩm
+                    </div><!-- End .toolbox-info -->
+                </div><!-- End .toolbox-center -->
+
+                <div class="toolbox-right">
+                </div><!-- End .toolbox-right -->
+            </div><!-- End .toolbox -->
+
+            <div class="products">
+                <div class="row">
+                    <% productList.forEach(item => { %>
+                        <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+                            <div class="product">
+                                <figure class="product-media">
+                                    <% if(item.amount === 0) { %>
+                                        <span class="product-label label-out">Đang hết hàng</span>
+                                    <% } %>
+                                    <% if(item.discount > 0) { %>
+                                        <span class="product-label label-sale"><%= item.discount %>% Giảm</span>
+                                    <% } %>
+                                    <a href="/product/<%=item.id%>">
+                                        <img src="/images/upload/<%=item.img%>" alt="Product image" class="product-image">
+                                    </a>
+                        
+                                    <div class="product-action-vertical">
+                                        <button class="btn-product-icon btn-wishlist btn-expandable js-addToWishlist" data-id="<%=item.id%>"><span>Thêm Vào Yêu Thích</span></button>
+                                    </div><!-- End .product-action -->
+                                    <div class="product-action">
+                                        <button class="btn-product btn-cart js-addToCart" data-id="<%=item.id%>"><span>Thêm Vào Giỏ Hàng</span></button>
+                                    </div><!-- End .product-action -->
+                                </figure><!-- End .product-media -->
+                        
+                                <div class="product-body">
+                                    <div class="product-cat">
+                                        <a href="/product-list/<%=item.category?.id%>"><%=item.category?.name%></a>
+                                    </div><!-- End .product-cat -->
+                                    <h3 class="product-title"><a href="/product/<%=item.id%>"><%=item.name%></a></h3><!-- End .product-title -->
+                                    <div class="product-price">
+                                        <% if(item.discount > 0) { %>
+                                            <span class="new-price">
+                                                <%= new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(item.price - (item.price*item.discount/100)) %>
+                                            </span>
+                                            <span class="old-price">
+                                                <%= new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(item.price) %>
+                                            </span>
+                                        <% } else { %>
+                                            <%= new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(item.price) %>
+                                        <% } %>
+                                    </div><!-- End .product-price -->
+                                </div><!-- End .product-body -->
+                            </div><!-- End .product -->
+                        </div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->
+                    <% }) %>
+                </div><!-- End .row -->
+
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item <%=page <= 1 && 'disabled'%>">
+                            <a class="page-link page-link-prev" href="/product-list/<%=category?.id%>?q=<%=q%>&page=<%=1%>" aria-label="Previous" tabindex="-1" aria-disabled="true">
+                                <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Đầu
+                            </a>
+                        </li>
+                        <% for(i=page-2; i<=page+2; i++) {
+                            if (i > 0 && i <= totalPage) { %>
+                                <li class="page-item <%=i===page && 'active'%>"><a class="page-link" href="/product-list/<%=category?.id%>?q=<%=q%>&page=<%=i%>"><%=i%></a></li>
+                        <%  }
+                        } %>
+                        <li class="page-item-total">trên <%=totalPage%></li>
+                        <li class="page-item <%=page >= totalPage && 'disabled'%>">
+                            <a class="page-link page-link-next" href="/product-list/<%=category?.id%>?q=<%=q%>&page=<%=totalPage%>" aria-label="Next">
+                                Cuối <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div><!-- End .products -->
+        </div><!-- End .container -->
+    </div><!-- End .page-content -->
+<%- include('layouts/homeFooter') -%>

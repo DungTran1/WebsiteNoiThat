@@ -1,0 +1,41 @@
+<!-- partial to render order table -->
+<table class="js-datatablesSimple">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Khách hàng</th>
+            <th>Ngày đặt hàng</th>
+            <th>Ngày giao hàng</th>
+            <th>Địa chỉ giao hàng</th>
+            <th>Thành tiền</th>
+            <th>Thanh toán</th>
+            <th>Trạng thái</th>
+            <th data-sortable="false">Chức năng</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% orderList.forEach(function(order){ %>
+            <tr>
+                <td>#<%=order.id%></td>
+                <td><a href="/admin/user/details/<%=order.user?.id%>"><%=order.user?.fullName || '?'%></a></td>
+                <td><%=order.orderDate?.toLocaleString() || '?'%></td>
+                <td><%=order.deliveryDate?.toLocaleString() || '?'%></td>
+                <td><%=order.deliveryAddress || '?'%></td>
+                <td><%=new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(order.totalPrice)%></td>
+                <td style="font-size:20px">
+                    <% if (order.isPaid) { %>
+                        <i class="fas fa-check" style="color: #00cc00 "></i>
+                    <% } else { %>
+                        <i class="fas fa-times" style="color: #E34724"></i>
+                    <% } %>
+                </td>
+                <td><%=orderStatusForDisplay.find(status => status.value === order.status).text%></td>
+                <td style="text-align:center; white-space: nowrap;">
+                    <a class="btn btn-primary" href="/admin/order/details/<%=order.id%>">Xem</a>
+                    <a class="btn btn-secondary" href="/admin/order/edit/<%=order.id%>">Sửa</a>
+                    <button class="btn btn-danger" onclick="DeleteOrder('<%=order.id%>')">Xoá</button>
+                </td>
+            </tr>
+        <% }) %>
+    </tbody>
+</table>

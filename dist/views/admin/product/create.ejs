@@ -1,0 +1,106 @@
+<%- include('../../layouts/adminHeader') -%>
+    <main class="px-5 py-3">
+        <h1 class="mb-3">Thêm sản phẩm</h1>
+        <form action="/admin/product/create" method="post" enctype="multipart/form-data">
+            
+            <% locals.errors && errors.forEach(err => { %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span class="error-<%= err.param %>"><%= err.msg %></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <% }); %>
+
+            <div class="row mb-3">
+                <label for="name" class="col-sm-2 col-form-label">Tên sản phẩm</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="name" id="name">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="categoryId" class="col-sm-2 col-form-label">Danh mục</label>
+                <div class="col-sm-10">
+                    <select class="form-select" name="categoryId" id="categoryId">
+                        <option value="0" selected> --- Chọn --- </option>
+                        <% cateList.forEach(function (cate) { %>
+                            <option value="<%=cate.id%>"><%=cate.name%></option>
+                        <% }) %>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="img" class="col-sm-2 col-form-label">Ảnh</label>
+                <div class="col-sm-10">
+                    <input type="file" class="form-control" name="img" id="img">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="description" class="col-sm-2 col-form-label">Mô tả</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" name="description" id="description" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="size" class="col-sm-2 col-form-label">Kích cỡ</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="size" id="size">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="color" class="col-sm-2 col-form-label">Màu sắc</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="color" id="color">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="material" class="col-sm-2 col-form-label">Chất liệu</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="material" id="material">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="origin" class="col-sm-2 col-form-label">Xuất xứ</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="origin" id="origin">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="price" class="col-sm-2 col-form-label">Giá (đ)</label>
+                <div class="col-sm-10">
+                    <input type="number" value="0" class="form-control" name="price" id="price">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="discount" class="col-sm-2 col-form-label">Giảm giá (%)</label>
+                <div class="col-sm-10">
+                    <input type="number" value="0" class="form-control" name="discount" id="discount">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="amount" class="col-sm-2 col-form-label">Số lượng tồn</label>
+                <div class="col-sm-10">
+                    <input type="number" value="0" class="form-control" name="amount" id="amount">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Thêm</button>
+            <a class="btn btn-secondary ms-2" href="/admin/product">Trở về</a>
+        </form>
+
+    </main>
+    <% if (locals.createSuccess) { %>
+        <script>
+            alert('Thêm mới thành công')
+            window.location = '/admin/product'
+        </script>
+    <% } %>
+<%- include('../../layouts/adminFooter') -%>

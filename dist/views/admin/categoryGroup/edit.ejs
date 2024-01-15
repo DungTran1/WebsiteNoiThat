@@ -1,0 +1,37 @@
+<%- include('../../layouts/adminHeader') -%>
+    <main class="px-5 py-3">
+        <h1 class="mb-3">Cập nhật nhóm danh mục</h1>
+        <form action="/admin/category-group/edit/<%=groupInfo.id%>" method="post" enctype="multipart/form-data">
+
+            <% locals.errors && errors.forEach(err => { %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span class="error-<%= err.param %>"><%= err.msg %></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <% }); %>
+            
+            <div class="row mb-3">
+                <label for="name" class="col-sm-2 col-form-label">Tên nhóm</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="name" id="name" value="<%=groupInfo.name%>">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="img" class="col-sm-2 col-form-label">Ảnh</label>
+                <div class="col-sm-10">
+                    <input type="file" class="form-control" name="img" id="img">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Cập nhật</button>
+            <a class="btn btn-secondary ms-2" href="/admin/category-group">Trở về</a>
+        </form>
+    </main>
+    <% if (locals.editSuccess) { %>
+        <script>
+            alert('Cập nhật thành công')
+            window.location = '/admin/category-group'
+        </script>
+    <% } %>
+<%- include('../../layouts/adminFooter') -%>

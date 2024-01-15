@@ -1,0 +1,134 @@
+<%- include('../layouts/homeHeader') -%>
+    <div class="page-header text-center" style="background-image: url('/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Trang cá nhân<span><%=curUser.fullName%></span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Tài khoản của tôi</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="dashboard">
+            <div class="container">
+                <div class="row">
+                    <aside class="col-md-3 col-lg-2">
+                        <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                            <li class="nav-item active">
+                                <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders" aria-selected="true">Đơn Hàng</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Thông Tin Cá Nhân</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" onclick="Logout()">Đăng Xuất</a>
+                            </li>
+                        </ul>
+                    </aside><!-- End .col-lg-3 -->
+
+                    <script>
+                        function Logout() {
+                            document.cookie = 'token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                            window.location = '/'
+                        }
+                    </script>
+
+                    <div class="col-md-9 col-lg-10">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+                                <% if (curUser.order.length > 0) { %>
+                                    <ul class="nav nav-tabs" id="tabs-2" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="tab-all-tab" data-toggle="tab" href="#tab-all" role="tab" aria-controls="tab-all" aria-selected="true">Tất cả</a>
+                                        </li>
+                                        <% orderStatusForDisplay.forEach(item => { %>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="tab-<%=item.value%>-tab" data-toggle="tab" href="#tab-<%=item.value%>" role="tab" aria-controls="tab-<%=item.value%>" aria-selected="false"><%=item.text%></a>
+                                            </li>
+                                        <% }) %>
+                                    </ul>
+                                    <div class="tab-content" id="tab-content-2">
+                                        <div class="tab-pane fade active show" id="tab-all" role="tabpanel" aria-labelledby="tab-all-tab">
+                                            <%- include('../partials/userOrder', { orderList: curUser.order }) -%>
+                                        </div><!-- .End .tab-pane -->
+                                        <% orderStatusForDisplay.forEach(item => { %>
+                                            <div class="tab-pane fade" id="tab-<%=item.value%>" role="tabpanel" aria-labelledby="tab-<%=item.value%>-tab">
+                                                <%- include('../partials/userOrder', { orderList: curUser.order.filter(order => order.status === item.value) }) -%>
+                                            </div><!-- .End .tab-pane -->
+                                        <% }) %>
+                                    </div><!-- End .tab-content -->
+                                <% } else { %>
+                                    <p>Bạn chưa có đơn hàng</p>
+                                    <a href="/product-list" class="btn btn-outline-primary-2"><span>Đặt Thêm Đơn</span><i class="icon-long-arrow-right"></i></a>
+                                <% } %>
+                            </div><!-- .End .tab-pane -->
+
+                            <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
+                                <form action="/profile/edit" method="post">
+                                    <% errors.forEach(err => { %>
+                                        <div class="alert alert-warning alert-dismissible fade show mb-1" role="alert">
+                                            <span class="error-<%= err.param %>"><%= err.msg %></span>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    <% }); %>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label>Tên *</label>
+                                            <input type="text" class="form-control" name="fullName" value="<%=curUser.fullName%>">
+                                        </div><!-- End .col-sm-6 -->
+
+                                        <div class="col-sm-6">
+                                            <label>Số điện thoại*</label>
+                                            <input type="text" class="form-control" name="phoneNumber" value="<%=curUser.phoneNumber%>">
+                                        </div><!-- End .col-sm-6 -->
+                                    </div><!-- End .row -->
+
+                                    <label>Email *</label>
+                                    <input type="email" class="form-control" name="email" value="<%=curUser.email%>">
+
+                                    <label>Ngày sinh *</label>
+                                    <input type="date" class="form-control" name="DoB" value="<%=curUser.DoB%>">
+
+                                    <label>Giới tính</label>
+                                    <div>
+                                        <% userGendersForDisplay.forEach(function (gender) { %>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="gender" value="<%=gender.value%>" id="gender<%=gender.value%>" <%= gender.value === curUser.gender ? 'checked' : '' %> />
+                                                <label class="form-check-label" for="gender<%=gender.value%>"><%=gender.text%></label>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                    
+                                    <label>Địa chỉ *</label>
+                                    <input type="text" class="form-control" name="address" value="<%=curUser.address%>">
+
+                                    <label>Mật khẩu hiện tại (Để trống nếu không muốn thay đổi)</label>
+                                    <input type="password" name="oldPass" class="form-control">
+
+                                    <label>Mật khẩu mới (Để trống nếu không muốn thay đổi)</label>
+                                    <input type="password" name="newPass" class="form-control">
+
+                                    <label>Nhập lại mật khẩu</label>
+                                    <input type="password" name="retypePass" class="form-control mb-2">
+
+                                    <button type="submit" class="btn btn-outline-primary-2">
+                                        <span>Cập nhật</span>
+                                        <i class="icon-long-arrow-right"></i>
+                                    </button>
+                                </form>
+                            </div><!-- .End .tab-pane -->
+                        </div>
+                    </div><!-- End .col-lg-9 -->
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .dashboard -->
+    </div><!-- End .page-content -->
+<%- include('../layouts/homeFooter') -%>

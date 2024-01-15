@@ -1,0 +1,72 @@
+<%- include('../../layouts/adminHeader') -%>
+    <main>
+        <div class="container-fluid px-4">
+            <ol class="breadcrumb my-4">
+                <li class="breadcrumb-item"><a href="/admin">Bản Tin</a></li>
+                <li class="breadcrumb-item active">Danh Mục</li>
+            </ol>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <a class="btn btn-primary" href="/admin/category/create">Thêm mới</a>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    Danh sách
+                </div>
+                <div class="card-body">
+                    <table class="js-datatablesSimple">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tên danh mục</th>
+                                <th>Nhóm</th>
+                                <th>Ảnh</th>
+                                <th data-sortable="false">Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% let count = 1 %>
+                            <% cateList.forEach(function(cate){ %>
+                                <tr>
+                                    <td><%= count++ %></td>
+                                    <td><%= cate.name %></td>
+                                    <td><%= cate.categoryGroup?.name || '?' %></td>
+                                    <td class="text-center">
+                                        <img src="/images/upload/<%= cate.img || 'default-image.jpg' %>" alt="No Image" height="150">
+                                    </td>
+                                    <td style="text-align:center; white-space: nowrap;">
+                                        <a class="btn btn-primary" href="/admin/category/details/<%=cate.id%>">Xem</a>
+                                        <a class="btn btn-secondary" href="/admin/category/edit/<%=cate.id%>">Sửa</a>
+                                        <button class="btn btn-danger" onclick="DeleteCate('<%=cate.id%>')">Xoá</button>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        function DeleteCate(id) {
+            if (confirm('Bạn có chắc muốn xoá danh mục ?')) {
+                fetch('/admin/category/delete/'+id, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        alert(data.message);
+                        window.location = '/admin/category'
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            }
+        }
+    </script>
+<%- include('../../layouts/adminFooter') -%>

@@ -1,0 +1,36 @@
+<%- include('../../layouts/adminHeader') -%>
+    <div class="px-5 py-3">
+        <h4>Thông tin người dùng</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt> Tên </dt>
+            <dd> <%= userInfo.fullName %> </dd>
+
+            <dt> Tài khoản </dt>
+            <dd> <%= userInfo.username %> </dd>
+
+            <dt> Email </dt>
+            <dd> <%= userInfo.email %> </dd>
+
+            <dt> Số điện thoại </dt>
+            <dd> <%= userInfo.phoneNumber %> </dd>
+            
+            <dt> Ngày sinh </dt>
+            <dd> <%= userInfo.DoB %> </dd>
+
+            <dt> Giới tính </dt>
+            <dd> <%= userGendersForDisplay.find(item => item.value === userInfo.gender).text %> </dd>
+
+            <dt> Địa chỉ </dt>
+            <dd> <%= userInfo.address || '?' %> </dd>
+
+            <dt> Quyền </dt>
+            <dd> <%= userRolesForDisplay.find(item => item.value === userInfo.role).text %> </dd>
+
+        </dl>
+        <p>
+            <a class="btn btn-primary" href="/admin/user/edit/<%=userInfo.id%>">Sửa</a>
+            <a class="btn btn-secondary ms-2" href="/admin/user">Trở về</a>
+        </p>
+    </div>
+<%- include('../../layouts/adminFooter') -%>

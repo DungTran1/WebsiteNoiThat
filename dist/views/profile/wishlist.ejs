@@ -1,0 +1,33 @@
+<%- include('../layouts/homeHeader') -%>
+    <div class="page-header text-center" style="background-image: url('/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Sản phẩm yêu thích</h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="container">
+            <table class="table table-wishlist table-mobile">
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Tình trạng</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody id="js-table-wishlist"></tbody>
+            </table><!-- End .table table-wishlist -->
+        </div><!-- End .container -->
+    </div><!-- End .page-content -->
+<%- include('../layouts/homeFooter') -%>
