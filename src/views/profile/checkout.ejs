@@ -1,0 +1,112 @@
+<%- include('../layouts/homeHeader') -%>
+<div class="page-header text-center" style="background-image: url('/images/page-header-bg.jpg')">
+    <div class="container">
+        <h1 class="page-title">Đặt hàng</h1>
+    </div><!-- End .container -->
+</div><!-- End .page-header -->
+
+<div class="page-content pb-0">
+    <div class="checkout">
+        <div class="container">
+            <form action="/profile/checkout" method="post">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <h2 class="checkout-title">Thông tin thanh toán</h2><!-- End .checkout-title -->
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Tên khách hàng *</label>
+                                <input type="text" class="form-control" value="<%=curUser.fullName%>" readonly>
+                            </div><!-- End .col-sm-6 -->
+    
+                            <div class="col-sm-6">
+                                <label>Số điện thoại *</label>
+                                <input type="text" class="form-control" value="<%=curUser.phoneNumber%>" readonly>
+                            </div><!-- End .col-sm-6 -->
+                        </div><!-- End .row -->
+    
+                        <label>Email *</label>
+                        <input type="email" class="form-control" value="<%=curUser.email%>" readonly>
+    
+                        <label>Địa chỉ *</label>
+                        <input type="text" class="form-control" value="<%=curUser.address%>" readonly>
+    
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="checkout-diff-address">
+                            <label class="custom-control-label" style="user-select: none" for="checkout-diff-address">Giao hàng đến địa chỉ khác?</label>
+                        </div><!-- End .custom-checkbox -->
+    
+                        <input name="diffAddress" type="text" class="form-control" placeholder="Nhập địa chỉ giao hàng..." readonly>
+    
+                        <label>Ghi chú giao hàng</label>
+                        <textarea class="form-control" cols="30" rows="4" name="note" placeholder="Ghi chú về đơn giao hàng, lưu ý cho người bán..."></textarea>
+                    </div><!-- End .col-lg-9 -->
+                    <aside class="col-lg-3">
+                        <div class="summary">
+                            <h3 class="summary-title">Đơn hàng của bạn</h3><!-- End .summary-title -->
+    
+                            <table class="table table-summary">
+                                <thead>
+                                    <tr>
+                                        <th>Sản phẩm</th>
+                                        <th>Giá</th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody>
+                                    <% let totalPrice = 0 %>
+                                    <% curUser.cart.filter(item => item.amount <= item.product.amount ).forEach(item => { %>
+                                        <% 
+                                            const total = (item.product.price - (item.product.price*item.product.discount/100)) * item.amount 
+                                            totalPrice += total
+                                        %>
+                                        <tr>
+                                            <td><a href="/product/<%=item.product.id%>"><%=item.product.name%> x <%=item.amount%></a></td>
+                                            <td><%= new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(total) %></td>
+                                        </tr>
+                                    <% }) %>
+                                    <tr class="summary-total">
+                                        <td>Tổng:</td>
+                                        <td><%= new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(totalPrice) %></td>
+                                    </tr><!-- End .summary-total -->
+                                </tbody>
+                            </table><!-- End .table table-summary -->
+
+                            <h3 class="summary-title">Phương thức thanh toán</h3><!-- End .summary-title -->
+
+                            <div class="accordion-summary mb-0">
+                                <div class="card mb-2">
+                                    <div class="form-check">
+                                        <input type="radio" name="payMethod" id="payMethod1" value="PayAfter" checked>
+                                        <label class="form-check-label" for="payMethod1">Trả tiền mặt khi nhận hàng</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="radio" name="payMethod" id="payMethod2" value="VnPay">
+                                        <label class="form-check-label" for="payMethod2">Thanh toán qua VnPay</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="radio" name="payMethod" id="payMethod3" value="Paypal">
+                                        <label class="form-check-label" for="payMethod3">Thanh toán qua Paypal</label>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                                    Đặt Mua
+                                    <i class="icon-long-arrow-right"></i>
+                                </button>
+                            </div><!-- End .summary -->
+                    </aside><!-- End .col-lg-3 -->
+                </div><!-- End .row -->
+            </form>
+        </div><!-- End .container -->
+    </div><!-- End .checkout -->
+</div><!-- End .page-content -->
+
+<script>
+    document.querySelector('#checkout-diff-address').addEventListener('change', function() {
+        let input = document.querySelector('input[name="diffAddress"]');
+        input.toggleAttribute('readonly')
+        if (!this.checked) input.value = ''
+        else input.focus()
+    })
+</script>
+<%- include('../layouts/homeFooter') -%>

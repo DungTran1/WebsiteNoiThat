@@ -1,0 +1,11 @@
+<!-- Mobile nav for home layout -->
+<% categoryGroupList.forEach(group => { %>
+    <li>
+        <a class="text-capitalize" href="#!"><%= group.name %></a>
+        <ul>
+            <% group.categories.forEach(category => { %>
+                <li><a href="/product-list/<%= category.id %>" class="text-capitalize"><%= category.name %></a></li>
+            <% }) %>
+        </ul>
+    </li>
+<% }) %>

@@ -1,0 +1,101 @@
+<%- include('../../layouts/adminHeader') -%>
+    <main class="px-5 py-3">
+        <h4 class="mb-3">Cập nhật đơn hàng #<%=orderInfo.id%></h4>
+        <div class="row">
+            <div class="col-md-7">
+                <form action="/admin/order/edit/<%=orderInfo.id%>" method="post">
+                    
+                    <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label">Khách hàng</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" value="<%=orderInfo.user?.fullName || '?'%>" disabled>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="deliveryAddress" class="col-sm-2 col-form-label">Địa chỉ giao hàng</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" value="<%=orderInfo.deliveryAddress%>" name="deliveryAddress" id="deliveryAddress">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="note" class="col-sm-2 col-form-label">Ghi chú</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" name="note" id="note" rows="3"><%=orderInfo.note%></textarea>
+                        </div>
+                    </div>
+
+                    <fieldset class="row mb-3">
+                        <legend class="col-form-label col-sm-2 pt-0">Thanh toán</legend>
+                        <div class="col-sm-10 row row-cols-auto mx-0">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="isPaid" value="false" id="unpaid" <%= !orderInfo.isPaid ? 'checked' : '' %> />
+                                <label class="form-check-label" for="unpaid">Chưa thanh toán</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="isPaid" value="true" id="paid" <%= orderInfo.isPaid ? 'checked' : '' %> />
+                                <label class="form-check-label" for="paid">Đã thanh toán</label>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    <% switch (orderInfo.status) {
+                        case OrderStatus.Unconfirmed: %>
+                            <button type="button" class="btn btn-info ms-2" onclick="SetOrderStatus('<%=OrderStatus.Confirmed%>')">Xác nhận đơn hàng</button>
+                            <% break
+                        case OrderStatus.Confirmed: %>
+                            <button type="button" class="btn btn-success ms-2" onclick="SetOrderStatus('<%=OrderStatus.Completed%>')">Hoàn tất đơn hàng</button>
+                            <button type="button" class="btn btn-danger ms-2" onclick="SetOrderStatus('<%=OrderStatus.Canceled%>')">Huỷ đơn hàng</button>
+                            <% break
+                        case OrderStatus.Completed: %>
+                            <button type="button" class="btn btn-danger ms-2" onclick="SetOrderStatus('<%=OrderStatus.Canceled%>')">Huỷ đơn hàng</button>
+                            <% break
+                    } %>
+                    <a class="btn btn-secondary ms-2" href="/admin/order">Trở về</a>
+                </form>
+                <script>
+                    function SetOrderStatus(status) {
+                        fetch('/admin/order/set-status/' + '<%=orderInfo.id%>',{
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({status})
+                        })
+                            .then((response) => response.json())
+                            .then((data) => {
+                                alert(data.message);
+                                if (data.success) window.location = '/admin/order'
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error);
+                            });
+                    }
+                </script>
+            </div>
+            <div class="col-md-5">
+                <dt class="mb-2 text-center">Chi tiết đơn hàng</dt>
+                <table class="js-datatablesSimple">
+                    <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% orderInfo.details.forEach(item => { %>
+                            <tr>
+                                <td><a href="/admin/product/details/<%=item.product?.id%>"><%=item.product?.name || '?'%></a></td>
+                                <td><%=item.amount%></td>
+                                <td><%=new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(item.price)%></td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+<%- include('../../layouts/adminFooter') -%>

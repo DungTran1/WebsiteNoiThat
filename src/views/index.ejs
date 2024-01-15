@@ -1,0 +1,145 @@
+<%- include('layouts/homeHeader') -%>
+<style>
+    .cat-block img {
+        width: 130px;
+        height: 130px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin: 10px 0;
+    }
+    .product-image {
+        object-fit: cover;
+    }
+</style>
+
+    <div class="intro-slider-container">
+        <div class="intro-slider owl-carousel owl-simple owl-nav-inside" data-toggle="owl" data-owl-options='{
+                            "nav": false,
+                            "responsive": {
+                                "992": {
+                                    "nav": true
+                                }
+                            }
+                        }'>
+            <div class="intro-slide" style="background-image: url('/images/bg-phong-khach.jpg');"></div><!-- End .intro-slide -->
+            <div class="intro-slide" style="background-image: url('/images/bg-phong-bep.jpg');"></div><!-- End .intro-slide -->
+            <div class="intro-slide" style="background-image: url('/images/bg-phong-ngu.jpg');"></div><!-- End .intro-slide -->
+        </div><!-- End .owl-carousel owl-simple -->
+
+        <span class="slider-loader"></span><!-- End .slider-loader -->
+    </div><!-- End .intro-slider-container -->
+
+    <div class="mb-4"></div><!-- End .mb-2 -->
+
+    <div class="container">
+        <h2 class="title text-center mb-2">Danh Mục Nổi Bật</h2><!-- End .title -->
+
+        <div class="cat-blocks-container">
+            <div class="row">
+                <% popularCategoryList.forEach(item => { %>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <a href="/product-list/<%= item.id %>" class="cat-block">
+                            <figure>
+                                <span>
+                                    <img src="/images/upload/<%= item.img %>" alt="Category image">
+                                </span>
+                            </figure>
+    
+                            <h3 class="cat-block-title text-capitalize"><%= item.name %></h3><!-- End .cat-block-title -->
+                        </a>
+                    </div><!-- End .col-sm-4 col-lg-2 -->
+                <% }) %>
+            </div><!-- End .row -->
+        </div><!-- End .cat-blocks-container -->
+    </div><!-- End .container -->
+
+    <div class="mb-2"></div><!-- End .mb-2 -->
+
+    <div class="bg-light pt-3 pb-5">
+        <div class="container">
+            <div class="heading heading-flex heading-border mb-3">
+                <div class="heading-left">
+                    <h2 class="title">Sản Phẩm Nổi Bật</h2><!-- End .title -->
+                </div><!-- End .heading-left -->
+
+                <div class="heading-right">
+                    <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#carousel-product-popular-full" role="tab" aria-selected="true">Tất cả</a>
+                        </li>
+                        <% popularCategoryList.slice(0,3).forEach((item, index) => { %>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#carousel-product-popular-<%= index %>" role="tab" aria-selected="false"><%= item.name %></a>
+                            </li>
+                        <% }) %>
+                    </ul>
+                </div><!-- End .heading-right -->
+            </div><!-- End .heading -->
+
+            <div class="tab-content tab-content-carousel">
+                <div class="tab-pane p-0 fade show active" id="carousel-product-popular-full" role="tabpanel">
+                    <%- include('partials/productCarousel', { productList: popularProducts }) -%>
+                </div><!-- .End .tab-pane -->
+                <% popularCategoryList.slice(0,3).forEach((item, index) => { %>
+                    <div class="tab-pane p-0 fade" id="carousel-product-popular-<%= index %>" role="tabpanel">
+                        <%- include('partials/productCarousel', { productList: popularProducts.filter(prod => prod.category?.id === item.id) }) -%>
+                    </div><!-- .End .tab-pane -->
+                <% }) %>
+            </div><!-- End .tab-content -->
+        </div><!-- End .container -->
+    </div><!-- End .bg-light pt-5 pb-5 -->
+
+    <div class="mb-3"></div><!-- End .mb-3 -->
+
+    <div class="container electronics">
+        <div class="heading heading-flex heading-border mb-3">
+            <div class="heading-left">
+                <h2 class="title">Sản phẩm mới nhất</h2><!-- End .title -->
+            </div><!-- End .heading-left -->
+
+            <div class="heading-right">
+                <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#carousel-product-newest-full" role="tab" aria-selected="true">Tất cả</a>
+                    </li>
+                    <% popularCategoryList.slice(0,3).forEach((item, index) => { %>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#carousel-product-newest-<%= index %>" role="tab" aria-selected="false"><%= item.name %></a>
+                        </li>
+                    <% }) %>
+                </ul>
+            </div><!-- End .heading-right -->
+        </div><!-- End .heading -->
+
+        <div class="tab-content tab-content-carousel">
+            <div class="tab-pane p-0 fade show active" id="carousel-product-newest-full" role="tabpanel">
+                <%- include('partials/productCarousel', { productList: latestProducts }) -%>
+            </div><!-- .End .tab-pane -->
+            <% popularCategoryList.slice(0,3).forEach((item, index) => { %>
+                <div class="tab-pane p-0 fade" id="carousel-product-newest-<%= index %>" role="tabpanel">
+                    <%- include('partials/productCarousel', { productList: latestProducts.filter(prod => prod.category?.id === item.id) }) -%>
+                </div><!-- .End .tab-pane -->
+            <% }) %>
+        </div><!-- End .tab-content -->
+    </div><!-- End .container -->
+
+    <script>
+        // document.addEventListener("DOMContentLoaded", function(){
+        //     $('.intro-slider').owlCarousel({
+        //     items: 1,
+        //     loop: true,
+        //     autoplay: true,
+        //     autoplayTimeout: 5000,
+        //     autoplaySpeed: 1000,
+        //     autoplayHoverPause: true,
+        //     nav: true,
+        //     dots: false,
+        //     responsive: {
+        //         992: {
+        //             dots: true
+        //         }
+        //     }
+        //     });
+        // });
+    </script>
+<%- include('layouts/homeFooter') -%>

@@ -1,0 +1,85 @@
+<%- include('../layouts/adminHeader') -%>
+<main>
+    <div class="container-fluid px-4">
+        <h3 class="text-center my-3">
+            NStore - Trang Quản Trị
+        </h3>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-comment-alt me-1"></i>
+                Thống kê tuần
+            </div>
+            <%
+                const revenue = ordersInWeek.reduce((total, order) => total + order.totalPrice, 0)
+            %>
+            <div class="card-body text-center">
+                <div class="row">
+                    <div class="col-xl-4">
+                        <div class="card notify bg-success text-white py-2 m-2">
+                            <div class="card-body">
+                                <i class="fas fa-coins me-1"></i>
+                                Doanh thu <br /> <b><%= new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(revenue) %></b>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="card notify bg-primary text-white py-2 m-2">
+                            <div class="card-body">
+                                <i class="fas fa-shopping-cart me-1"></i>
+                                Đơn hàng <br /> <b><%=ordersInWeek.length%></b>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="card notify bg-info text-white py-2 m-2">
+                            <div class="card-body">
+                                <i class="fas fa-coins me-1"></i>
+                                Doanh thu/Đơn <br /> <b><%= new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(revenue / ordersInWeek.length || 0) %></b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-shopping-cart me-1"></i>
+                Đơn hàng
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="card text-center m-2">
+                            <div class="card-body">
+                                <b><%=orderList.filter(order => order.status === OrderStatus.Unconfirmed).length %></b> <br /> Chờ xác nhận
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="card text-center m-2">
+                            <div class="card-body">
+                                <b><%=orderList.filter(order => order.status === OrderStatus.Confirmed).length %></b> <br /> Đã xác nhận
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="card text-center m-2">
+                            <div class="card-body">
+                                <b><%=orderList.filter(order => order.status === OrderStatus.Completed).length %></b> <br /> Hoàn tất
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="card text-center m-2">
+                            <div class="card-body">
+                                <b><%=orderList.filter(order => order.status === OrderStatus.Canceled).length %></b> <br /> Đơn huỷ
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<%- include('../layouts/adminFooter') -%>

@@ -1,0 +1,23 @@
+<!-- Top-left side nav for home layout -->
+<% categoryGroupList.forEach(group => { %>
+    <li class="megamenu-container">
+        <a class="sf-with-ul text-capitalize" href="#!"><%= group.name %></a>
+
+        <div class="megamenu megamenu-md">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    <div class="menu-col">
+                        <div class="menu-title text-capitalize"><%= group.name %></div><!-- End .menu-title -->
+                        <ul>
+                            <% group.categories.forEach(category => { %>
+                                <li><a href="/product-list/<%= category.id %>" class="text-capitalize"><%= category.name %></a></li>
+                            <% }) %>
+                        </ul>
+                    </div><!-- End .menu-col -->
+                </div><!-- End .col-md-8 -->
+
+                <div class="col-md-8 banner-cats" style="background: url('/images/upload/<%= group.img %>') center / cover"></div><!-- End .col-md-4 -->
+            </div><!-- End .row -->
+        </div><!-- End .megamenu -->
+    </li>
+<% }) %>

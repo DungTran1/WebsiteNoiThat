@@ -1,0 +1,81 @@
+<%- include('../layouts/homeHeader') -%>
+    <div class="page-header text-center" style="background-image: url('/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Đơn hàng - #<%=orderInfo.id%></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+
+    <div class="page-content pt-4">
+        <div class="dashboard">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7">
+                        <form action="/profile/order/<%=orderInfo.id%>" method="post">
+                            <% errors.forEach(err => { %>
+                                <li class="text-danger mb-2"><%= err.msg %></li>
+                            <% }); %>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    Ngày đặt hàng
+                                    <input type="text" class="form-control" value="<%=orderInfo.orderDate.toLocaleString()%>" readonly />
+                                </div><!-- End .col-sm-6 -->
+    
+                                <div class="col-sm-6">
+                                    Ngày giao hàng
+                                    <input type="text" class="form-control" value="<%=orderInfo.deliveryDate?.toLocaleString() || '?'%>" readonly />
+                                </div><!-- End .col-sm-6 -->
+                            </div><!-- End .row -->
+    
+                            <label for="deliveryAddress">Địa chỉ giao hàng</label>
+                            <input type="text" class="form-control" id="deliveryAddress" name="deliveryAddress" value="<%=orderInfo.deliveryAddress%>" />
+    
+                            <label for="note">Ghi chú</label>
+                            <textarea class="form-control" name="note" id="note" cols="30" rows="3"><%=orderInfo.note%></textarea>
+                            <div class="text-danger mb-1">(Lưu ý: Chỉ được cập nhật khi đơn chưa được xác nhận để tránh sai sót trong quá trình vận chuyển)</div>
+                            
+                            <button type="submit" class="btn btn-outline-primary-2">
+                                Cập nhật thông tin
+                            </button>
+                            <a href="/profile" class="btn btn-outline-primary-2">Quay lại</a>
+                        </form>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="summary">
+                            <h3 class="summary-title">Đơn hàng của bạn</h3><!-- End .summary-title -->
+
+                            <table class="table table-summary">
+                                <thead>
+                                    <tr>
+                                        <th>Sản phẩm</th>
+                                        <th>Giá</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <% orderInfo.details.forEach(item => { %>
+                                        <tr>
+                                            <td><a href="/product/<%=item.product.id%>"><%=item.product.name%> x <%=item.amount%></a></td>
+                                            <td><%=new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(item.price)%></td>
+                                        </tr>
+                                    <% }) %>
+                                    <% const total = orderInfo.details.reduce((total, item) => total + item.price, 0) %>
+                                    <tr class="summary-total">
+                                        <td>Tổng:</td>
+                                        <td><%=new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(total)%></td>
+                                    </tr><!-- End .summary-total -->
+                                </tbody>
+                            </table><!-- End .table table-summary -->
+                        </div>
+                    </div>
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .dashboard -->
+    </div><!-- End .page-content -->
+    <% if (locals.editSuccess) { %>
+        <script>
+            alert('Cập nhật thành công')
+            window.location = '/profile'
+        </script>
+    <% } %>
+<%- include('../layouts/homeFooter') -%>

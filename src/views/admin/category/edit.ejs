@@ -1,0 +1,49 @@
+<%- include('../../layouts/adminHeader') -%>
+    <main class="px-5 py-3">
+        <h1 class="mb-3">Cập nhật danh mục</h1>
+        <form action="/admin/category/edit/<%=cateInfo.id%>" method="post" enctype="multipart/form-data">
+
+            <% locals.errors && errors.forEach(err => { %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span class="error-<%= err.param %>"><%= err.msg %></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <% }); %>
+            
+            <div class="row mb-3">
+                <label for="name" class="col-sm-2 col-form-label">Tên danh mục</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="name" id="name" value="<%=cateInfo.name%>">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="groupId" class="col-sm-2 col-form-label">Nhóm</label>
+                <div class="col-sm-10">
+                    <select class="form-select" name="groupId" id="groupId">
+                        <option value="0" selected> --- Để trống để tạo nhóm danh mục --- </option>
+                        <% cateGroups.forEach(function (group) { %>
+                            <option <%=cateInfo.categoryGroup?.id === group.id ? 'selected' : ''%> value="<%=group.id%>"><%=group.name%></option>
+                        <% }) %>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="img" class="col-sm-2 col-form-label">Ảnh</label>
+                <div class="col-sm-10">
+                    <input type="file" class="form-control" name="img" id="img">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Cập nhật</button>
+            <a class="btn btn-secondary ms-2" href="/admin/category">Trở về</a>
+        </form>
+    </main>
+    <% if (locals.editSuccess) { %>
+        <script>
+            alert('Cập nhật thành công')
+            window.location = '/admin/category'
+        </script>
+    <% } %>
+<%- include('../../layouts/adminFooter') -%>

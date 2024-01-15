@@ -1,0 +1,32 @@
+<table class="table text-center">
+    <thead>
+        <tr>
+            <th>Mã đơn hàng</th>
+            <th>Ngày đặt hàng</th>
+            <th>Ngày giao hàng</th>
+            <th>Địa chỉ giao hàng</th>
+            <th>Thành tiền</th>
+            <th>Thanh toán</th>
+            <th>Trạng thái</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% orderList.forEach(item => { %>
+            <tr>
+                <td><a href="/profile/order/<%=item.id%>">#<%=item.id%></a></td>
+                <td><%=item.orderDate?.toLocaleString() || '?'%></td>
+                <td><%=item.deliveryDate?.toLocaleString() || '?'%></td>
+                <td><%=item.deliveryAddress || '?'%></td>
+                <td><%=new Intl.NumberFormat('vi-vn', {style: 'currency', currency: 'VND'}).format(item.totalPrice)%></td>
+                <td style="font-size:20px">
+                    <% if (item.isPaid) { %>
+                        <i class="la la-check" style="color: #00cc00 "></i>
+                    <% } else { %>
+                        <i class="la la-times" style="color: #E34724"></i>
+                    <% } %>
+                </td>
+                <td><%=orderStatusForDisplay.find(status => status.value === item.status).text%></td>
+            </tr>
+        <% }) %>
+    </tbody>
+</table>

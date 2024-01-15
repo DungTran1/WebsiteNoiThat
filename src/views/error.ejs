@@ -1,0 +1,15 @@
+<%- include('layouts/homeHeader') -%>
+<div class="error-content text-center" style="background-image: url('/images/error-bg.jpg')">
+    <div class="container">
+        <h1 class="error-title">Error <%= status %></h1><!-- End .error-title -->
+        <p><%= message %></p>
+        <a href="/" class="btn btn-outline-primary-2 btn-minwidth-lg">
+            <span>Trở về trang chủ</span>
+            <i class="icon-long-arrow-right"></i>
+        </a>
+    </div><!-- End .container -->
+</div><!-- End .error-content text-center -->
+<div class="pl-5">
+    <pre><%= error.stack %></pre>
+</div>
+<%- include('layouts/homeFooter') -%>
