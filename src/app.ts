@@ -13,13 +13,13 @@ import apiRouter from './routes/api'
 
 import UserController from './controllers/UserController'
 import AppDataSource from './models'
-// AppDataSource.initialize()
-//     .then(() => {
-//         console.log('Data Source has been initialized!')
-//     })
-//     .catch((err) => {
-//         console.error('Error during Data Source initialization:', err)
-//     })
+AppDataSource.initialize()
+    .then(() => {
+        console.log('Data Source has been initialized!')
+    })
+    .catch((err) => {
+        console.error('Error during Data Source initialization:', err)
+    })
 const port = process.env.SERVER_PORT
 const app = express()
 
@@ -39,15 +39,14 @@ declare module 'express-session' {
 }
 
 // authentication
-// app.use(UserController.Authenticate)
+app.use(UserController.Authenticate)
 
 // main route
-app.use("/", (req,res)=>res.render('test',{data: 'daubuoi'}))
-// app.use('/', homeRouter)
-// app.use('/profile', profileRouter)
-// app.use('/admin', adminRouter)
+app.use('/', homeRouter)
+app.use('/profile', profileRouter)
+app.use('/admin', adminRouter)
 
-// app.use('/api', apiRouter)
+app.use('/api', apiRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req: Request, res: Response, next: NextFunction) {
@@ -55,15 +54,15 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
 })
 
 // error handler
-// app.use(function (err: HttpError, req: Request, res: Response, next: NextFunction) {
-//     // set locals, only providing error in development
-//     res.locals.message = err.message
-//     res.locals.status = err.status
-//     res.locals.error = req.app.get('env') === 'development' ? err : {}
+app.use(function (err: HttpError, req: Request, res: Response, next: NextFunction) {
+    // set locals, only providing error in development
+    res.locals.message = err.message
+    res.locals.status = err.status
+    res.locals.error = req.app.get('env') === 'development' ? err : {}
 
-//     // render the error page
-//     res.status(err.status || 500).render('error')
-// })
+    // render the error page
+    res.status(err.status || 500).render('error')
+})
 
 app.listen(port, function () {
     console.log(`Server is listening on http://localhost:${port}`)
