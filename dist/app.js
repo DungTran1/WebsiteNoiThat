@@ -19,7 +19,7 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, cookie_parser_1.default)());
 app.use((0, express_session_1.default)({ secret: process.env.SECRET_KEY || 'secret', cookie: { maxAge: 24 * 60 * 60 * 1000 }, resave: false, saveUninitialized: true }));
-app.use("/", (req, res) => res.send("Hello"));
+app.use("/", (req, res) => res.render('test', { data: 'daubuoi' }));
 app.use(function (req, res, next) {
     next((0, http_errors_1.default)(404, 'Page not found'));
 });

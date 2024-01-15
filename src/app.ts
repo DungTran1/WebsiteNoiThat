@@ -42,7 +42,7 @@ declare module 'express-session' {
 // app.use(UserController.Authenticate)
 
 // main route
-app.use("/", (req,res)=>res.send("Hello"))
+app.use("/", (req,res)=>res.render('test',{data: 'daubuoi'}))
 // app.use('/', homeRouter)
 // app.use('/profile', profileRouter)
 // app.use('/admin', adminRouter)
