@@ -11,17 +11,18 @@ import OrderDetail from './entity/OrderDetail'
 
 const AppDataSource = new DataSource({
     type: 'mssql',
-    host: 'localhost',
-    username: 'sa',
-    password: 'khongthe01',
-    database: 'WebsiteNoiThat',
+    host: process.env.DATABASE_HOST,
+    username: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME,
     synchronize: true,
     logging: false,
+    port: parseInt(process.env.DATABASE_PORT || ''),
     entities: [User, Category, Product, ProductImage, CategoryGroup, Cart, Order, OrderDetail],
     migrations: [],
     subscribers: [],
     options: {
-        encrypt: false,
+        encrypt: true,
     },
 })
 

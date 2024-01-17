@@ -24,17 +24,18 @@ const OrderDetail_1 = __importDefault(require("./entity/OrderDetail"));
 exports.OrderDetail = OrderDetail_1.default;
 const AppDataSource = new typeorm_1.DataSource({
     type: 'mssql',
-    host: 'localhost',
-    username: 'sa',
-    password: 'khongthe01',
-    database: 'WebsiteNoiThat',
+    host: process.env.DATABASE_HOST,
+    username: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME,
     synchronize: true,
     logging: false,
+    port: parseInt(process.env.DATABASE_PORT || ''),
     entities: [User_1.default, Category_1.default, Product_1.default, ProductImage_1.default, CategoryGroup_1.default, Cart_1.default, Order_1.default, OrderDetail_1.default],
     migrations: [],
     subscribers: [],
     options: {
-        encrypt: false,
+        encrypt: true,
     },
 });
 exports.default = AppDataSource;
